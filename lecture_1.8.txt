@@ -1,0 +1,31 @@
+//1. выбрать рейсы (несколько полей, включая дата старта и название) со стартом в 2020 году
+1. SELECT Start_Date__c, Name 	FROM Trip__c 	WHERE Start_Date__c >= 2020-01-01 AND Start_Date__c <= 2020-12-31 //  работает
+
+//2. выбрать туристов (имя, возраст) чье имя содержит Джон
+2. SELECT Name FROM Tourist__c WHERE Name= 'Jon'  // работает
+
+//3. выбрать туристов (имя, возраст) с возрастом 20, 22, 24 года
+3.SELECT Name, Age__c FROM Tourist__c WHERE Age__c IN (20, 22, 24) // работает
+
+//4. выбрать рейсы (дата старта, название) со списком туристов (имя, возраст)
+4.SELECT Trip__r.Start_Date__c, Trip__r.Name, Tourist__r.Name, Tourist__r.Age__c FROM Flight__c  // работает
+
+//5. выбрать туристов (имя, возраст) со списком рейсов (дата старта, название)
+5.SELECT Tourist__r.Name, Tourist__r.Age__c, Trip__r.Start_Date__c, Trip__r.Name   FROM Flight__c
+5.1 SELECT Name, Age__c, (SELECT Trip__r.Name, Trip__r.Start_Date__c FROM Flight__r) FROM Tourist__c
+
+//6. выбрать туристов (имя, возраст) которые не зарегистрировались ни на один рейс
+6. SELECT Name, Age__c  FROM Tourist__c where Upcoming_Flight_Count__c = 0 
+
+//7. выбрать туристов (имя, возраст), у которых рейс стартовал в 2020 году.
+7.SELECT Tourist__r.Name, Tourist__r.Age__c FROM Flight__c WHERE Trip__r.Start_Date__c >= 2020-01-01 AND  Trip__r.Start_Date__c <= 2020-12-31
+7.1 SELECT Tourist__r.Name, Tourist__r.Age__c FROM Flight__c WHERE CALENDAR_YEAR(Trip__r.Start_Date__c)=2020
+
+//8. выбрать рейсы (дата старта, название) за 2020 год, в которых есть туристы возрастом от 20 до 30 лет и имя туристов начинается с ‘B’(англ).
+8.
+SELECT  Trip__r.Start_Date__c ,Trip__r.Name
+FROM Flight__c 
+WHERE (Trip__r.Start_Date__c >= 2020-01-01 AND  Trip__r.Start_Date__c <= 2020-12-31)
+AND (Tourist__r.Age__c>=20 
+AND Tourist__r.Age__c<=30) 
+AND Tourist__r.Name LIKE 'B%'
